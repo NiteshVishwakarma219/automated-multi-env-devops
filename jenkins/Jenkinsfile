@@ -132,24 +132,29 @@ pipeline {
         }
 
         stage('Install Dependencies') {
-            steps {
+             steps {
                 dir('application/backend') {
-                    sh '''
-                    pip3 install -r requirements.txt
-                    '''
-                }
+                sh '''
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+                   pip install -r requirements.txt
+                '''
             }
         }
+    }
+}
 
         stage('Verify Flask') {
             steps {
                 dir('application/backend') {
-                    sh '''
-                    python3 -c "from flask import Flask; print('Flask Installed Successfully')"
-                    '''
-                }
-            }
+                sh '''
+                . venv/bin/activate
+                python -c "from flask import Flask; print('Flask Installed Successfully')"
+                '''
         }
+    }
+}
 
     }
 

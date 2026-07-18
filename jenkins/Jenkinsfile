@@ -114,48 +114,16 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "cloudops-backend"
-        IMAGE_TAG = "${BUILD_NUMBER}"
-    }
-
     stages {
-
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                dir('application/backend') {
-                    sh '''
-                    pip3 install --break-system-packages -r requirements.txt
-                    '''
-                }
-            }
-        }
-
-        stage('Build Docker Image') {
+        stage('Check User') {
             steps {
                 sh '''
-                docker build \
-                -t ${IMAGE_NAME}:${IMAGE_TAG} \
-                -f docker/backend/Dockerfile .
+                whoami
+                id
+                ls -l /var/run/docker.sock
+                docker version
                 '''
             }
-        }
-
-    }
-
-    post {
-        success {
-            echo "Docker image built successfully."
-        }
-
-        failure {
-            echo "Pipeline failed."
         }
     }
 }

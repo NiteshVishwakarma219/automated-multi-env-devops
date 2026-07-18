@@ -116,14 +116,50 @@ pipeline {
 
     stages {
 
-        stage('System Information') {
+        stage('Checkout') {
             steps {
-                sh 'pwd'
-                sh 'whoami'
-                sh 'python3 --version || true'
-                sh 'pip3 --version || true'
+                echo "Repository cloned successfully"
             }
         }
 
+        stage('Check Python') {
+            steps {
+                sh '''
+                python3 --version
+                pip3 --version
+                '''
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('application/backend') {
+                    sh '''
+                    pip3 install -r requirements.txt
+                    '''
+                }
+            }
+        }
+
+        stage('Verify Flask') {
+            steps {
+                dir('application/backend') {
+                    sh '''
+                    python3 -c "from flask import Flask; print('Flask Installed Successfully')"
+                    '''
+                }
+            }
+        }
+
+    }
+
+    post {
+        success {
+            echo "Pipeline Completed Successfully"
+        }
+
+        failure {
+            echo "Pipeline Failed"
+        }
     }
 }

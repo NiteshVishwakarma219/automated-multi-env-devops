@@ -1,0 +1,12 @@
+git
+workflow-aggregator
+docker-workflow
+credentials
+credentials-binding
+github
+pipeline-stage-view
+blueocean
+ssh-agent
+kubernetes-cli
+ansicolor
+timestamper

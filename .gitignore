@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual Environment
+venv/
+.env
+
+# VS Code
+.vscode/
+
+# IntelliJ
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Kubernetes
+*.kubeconfig
+
+# Docker
+*.log
+
+# Logs
+logs/
+
+# Node
+node_modules/
+
+# Coverage
+coverage/
+
+# Test Reports
+reports/
+
+# Jenkins
+workspace/

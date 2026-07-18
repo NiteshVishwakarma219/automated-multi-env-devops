@@ -114,57 +114,48 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "cloudops-backend"
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+
     stages {
 
         stage('Checkout') {
             steps {
-                echo "Repository cloned successfully"
-            }
-        }
-
-        stage('Check Python') {
-            steps {
-                sh '''
-                python3 --version
-                pip3 --version
-                '''
+                checkout scm
             }
         }
 
         stage('Install Dependencies') {
-             steps {
+            steps {
                 dir('application/backend') {
+                    sh '''
+                    pip3 install --break-system-packages -r requirements.txt
+                    '''
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
                 sh '''
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install --upgrade pip
-                   pip install -r requirements.txt
+                docker build \
+                -t ${IMAGE_NAME}:${IMAGE_TAG} \
+                -f docker/backend/Dockerfile .
                 '''
             }
         }
-    }
-
-
-        stage('Verify Flask') {
-            steps {
-                dir('application/backend') {
-                sh '''
-                . venv/bin/activate
-                python -c "from flask import Flask; print('Flask Installed Successfully')"
-                '''
-        }
-    }
-}
 
     }
 
     post {
         success {
-            echo "Pipeline Completed Successfully"
+            echo "Docker image built successfully."
         }
 
         failure {
-            echo "Pipeline Failed"
+            echo "Pipeline failed."
         }
     }
 }

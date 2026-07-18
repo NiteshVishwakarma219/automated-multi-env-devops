@@ -35,8 +35,10 @@ RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 # Install Helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-USER jenkins
-
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 
 RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt
+
+USER root
+
+CMD ["/usr/local/bin/jenkins.sh"]

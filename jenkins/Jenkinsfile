@@ -2,109 +2,28 @@ pipeline {
 
     agent any
 
-    environment {
-        IMAGE_NAME = "yourdockerhub/cloudops-backend"
-        VERSION = "${BUILD_NUMBER}"
-    }
-
     stages {
 
-        stage('Checkout') {
+        stage('Repository') {
             steps {
-                git branch: 'main',
-                url: 'https://github.com/yourusername/automated-multi-env-devops.git'
+
+                echo "Repository cloned successfully"
+
+                sh "pwd"
+
+                sh "ls -la"
+
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Backend Files') {
             steps {
-                sh 'pip install -r application/backend/requirements.txt'
+
+                sh "ls -la application"
+
+                sh "ls -la application/backend"
+
             }
-        }
-
-        stage('Unit Test') {
-            steps {
-                sh 'echo Running Tests...'
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t $IMAGE_NAME:$VERSION -f docker/backend/Dockerfile .'
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub',
-                    usernameVariable: 'USERNAME',
-                    passwordVariable: 'PASSWORD'
-                )]) {
-
-                    sh '''
-                    echo $PASSWORD | docker login -u $USERNAME --password-stdin
-                    docker push $IMAGE_NAME:$VERSION
-                    '''
-                }
-            }
-        }
-
-        stage('Deploy Dev') {
-            steps {
-                sh '''
-                helm upgrade --install cloudops-dev ./helm/cloudops \
-                -f helm/cloudops/values-dev.yaml \
-                --set image.tag=$VERSION \
-                -n dev
-                '''
-            }
-        }
-
-        stage('Approval') {
-            steps {
-                input "Deploy to Staging?"
-            }
-        }
-
-        stage('Deploy Staging') {
-            steps {
-                sh '''
-                helm upgrade --install cloudops-staging ./helm/cloudops \
-                -f helm/cloudops/values-staging.yaml \
-                --set image.tag=$VERSION \
-                -n staging
-                '''
-            }
-        }
-
-        stage('Production Approval') {
-            steps {
-                input "Deploy to Production?"
-            }
-        }
-
-        stage('Deploy Production') {
-            steps {
-                sh '''
-                helm upgrade --install cloudops-prod ./helm/cloudops \
-                -f helm/cloudops/values-production.yaml \
-                --set image.tag=$VERSION \
-                -n production
-                '''
-            }
-        }
-
-    }
-
-    post {
-
-        success {
-            echo "Deployment Successful"
-        }
-
-        failure {
-            echo "Deployment Failed"
         }
 
     }

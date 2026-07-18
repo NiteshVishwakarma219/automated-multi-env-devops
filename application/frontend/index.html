@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudOps Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>☁️ CloudOps Dashboard</h1>
+
+    <div class="card">
+
+        <p><strong>Environment:</strong>
+            <span id="environment">Loading...</span>
+        </p>
+
+        <p><strong>Version:</strong>
+            <span id="version">Loading...</span>
+        </p>
+
+        <p><strong>Status:</strong>
+            <span id="status">Loading...</span>
+        </p>
+
+        <p><strong>Server Time:</strong>
+            <span id="time">Loading...</span>
+        </p>
+
+        <button onclick="loadData()">
+            Refresh
+        </button>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

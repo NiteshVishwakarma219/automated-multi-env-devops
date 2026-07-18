@@ -12,7 +12,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/yourusername/automated-multi-env-devops.git'
+                url: 'https://github.com/NiteshVishwakarma219/automated-multi-env-devops.git'
             }
         }
 
